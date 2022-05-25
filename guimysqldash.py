@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from datetime import date
 import random
 import requests
+import locale as l
 import mysql.connector as mysql
 # função para conexão ao banco e inserção das informações
 def banco():
@@ -13,14 +14,13 @@ def banco():
         # esta é a função de conexão com o banco
         # devem ser fornecidos as configurações de conexão
         conexao = mysql.connect(
-            host = "127.0.0.1", # ip do servidor
-            user = "root", # usuario
-            password = "root", # senha do usuario
-            database = "dbpython" # base de dados
+            host="127.0.0.1", # ip do servidor
+            user="root", # usuario
+            password="root", # senha do usuario
+            database="dbpython" # base de dados
         )
         # mensagem para verificação da conexão
         print("Conexão realizada com sucesso.")
-        print("Salvando no banco de dados...")    
         # abre um Cursor para executar um SQL
         cursor = conexao.cursor()
         # comando SQL a ser executado
@@ -31,6 +31,7 @@ def banco():
         # efetivando a alteração
         conexao.commit() # obrigatório para INSERT, DELETE e UPDATE
         print("Salvo com sucesso.")
+    # instrução para tratamento de erro e excessão
     except mysql.Error as e:
         # capturando possiveis erros de conexao ou SQL com TRY CATCH
         print(e.msg)    
@@ -86,12 +87,14 @@ BPAD_TOP = ((20,20), (20, 10))
 BPAD_LEFT = ((20,10), (0, 10))
 BPAD_LEFT_INSIDE = (0, 10)
 BPAD_RIGHT = ((10,20), (10, 20))
+# definição de localidade, para saída da data em português
+l.setlocale(l.LC_TIME, "pt")
 # data, em formato de texto, importada de datetime
 data_atual = date.today()
-data_em_texto = '{}/{}/{}'.format(data_atual.day, data_atual.month,data_atual.year)
+data_em_texto = data_atual.strftime("%d de %B de %Y").title()
 # banner com apresentação e data atual
 top_banner = [[sg.Text('Dashboard'+ ' '*64, font='Any 20', background_color=DARK_HEADER_COLOR),
-               sg.Text('Brasília, '+data_em_texto, font='Any 20', background_color=DARK_HEADER_COLOR)]]
+               sg.Text(data_em_texto, font='Any 20', background_color=DARK_HEADER_COLOR)]]
 # configuração da api para previsao do tempo em Brasília, através de requests
 API_KEY = "7753ee82ffac2836bdb825e03be43f51"
 cidade = "Brasília"
