@@ -4,6 +4,7 @@ import random
 import requests
 import locale as l
 import mysql.connector as mysql
+
 # função para conexão ao banco e inserção das informações
 def banco():
     # variáves recebem valores dos inputs
@@ -69,7 +70,7 @@ def grafico():
     # fim para instruções da função
     window.close()
 # dicionário de temas para o dashboard
-theme_dict = {'BACKGROUND': '#2B475D',
+theme_dict = {'BACKGROUND': '#003D9D',
                 'TEXT': '#FFFFFF',
                 'INPUT': '#F2EFE8',
                 'TEXT_INPUT': '#000000',
@@ -81,20 +82,21 @@ theme_dict = {'BACKGROUND': '#2B475D',
 sg.LOOK_AND_FEEL_TABLE['Dashboard'] = theme_dict
 sg.theme('Dashboard')
 # posição, borda e cores
-BORDER_COLOR = '#C7D5E0'
-DARK_HEADER_COLOR = '#1B2838'
+BORDER_COLOR = '#FFFFFF'
+DARK_HEADER_COLOR = '#FFFFFF'
 BPAD_TOP = ((20,20), (20, 10))
 BPAD_LEFT = ((20,10), (0, 10))
 BPAD_LEFT_INSIDE = (0, 10)
 BPAD_RIGHT = ((10,20), (10, 20))
+
 # definição de localidade, para saída da data em português
 l.setlocale(l.LC_TIME, "pt")
 # data, em formato de texto, importada de datetime
 data_atual = date.today()
 data_em_texto = data_atual.strftime("%d de %B de %Y").title()
 # banner com apresentação e data atual
-top_banner = [[sg.Text('Dashboard'+ ' '*64, font='Any 20', background_color=DARK_HEADER_COLOR),
-               sg.Text(data_em_texto, font='Any 20', background_color=DARK_HEADER_COLOR)]]
+top_banner = [[sg.Text(' '*2, background_color='#FFFFFF'),sg.Image('icone.png', background_color='#ffffff'),sg.Text(' '*128, background_color='#FFFFFF'),
+               sg.Text(data_em_texto, font='Any 14', background_color='#005DAD')]]
 # configuração da api para previsao do tempo em Brasília, através de requests
 API_KEY = "7753ee82ffac2836bdb825e03be43f51"
 cidade = "Brasília"
@@ -104,30 +106,32 @@ requisicao_dic = requisicao.json()
 descricao = requisicao_dic['weather'][0]['description']
 temperatura = requisicao_dic['main']['temp'] - 273.15
 # bloco topo do dashboard com previsao do tempo
-top  = [[sg.Text(f"Temperatura em Brasília {temperatura:.2f} ºC", size=(50,1), justification='c', pad=BPAD_TOP, font='Any 20')],
+top  = [[sg.Text(' '*30,),sg.Text(f"Temperatura em Brasília {temperatura:.2f} ºC", size=(50,1), justification='c', pad=BPAD_TOP, font='Any 16')],
             [sg.T(f'{i*25}-{i*34}') for i in range(7)],]
 # bloco com input para nome do usuário, pop-up com mensagem de boas vindas
-block_2 = [[sg.Text('Entrar', font='Any 20')],
-            [sg.Text('\t  Pop-up', font='Any 10')],
-            [sg.Input(key='-user-'), sg.Text('Nome do Usuário')],
+block_2 = [[sg.Text('Entrar', font='Any 15')],
+            [sg.Text('')],
+            [sg.Text('Nome do Usuário'), sg.Input(key='-user-')],
             [sg.Button('Login'), sg.Button('Cancelar')]  ]
 # bloco com botão que deverá abrir gráfico com valores aleatórios
-block_3 = [[sg.Text('Estatística', font='Any 20')],
+block_3 = [[sg.Text('Estatística', font='Any 16')],
             [sg.Text('\t  Gráfico', font='Any 10')],
             [sg.Image(data=sg.DEFAULT_BASE64_ICON)],
-            [sg.Button('Graf'),sg.Button('Finalizar')]  ]  # comando para exibir imagens
+            [sg.Button('Graf'),sg.Button('Finalizar')]]  # comando para exibir imagens
 # bloco com um conjunto de inputs para serem usados com bancos de dados
-block_4 = [[sg.Text('Cadastro', font='Any 20')],
+block_4 = [[sg.Text('Cadastro', font='Any 16')],
+            [sg.Text(''),],
             [sg.OptionMenu(values=('Java', 'PHP', 'Python'), default_value='Curso',  k='-OPTION MENU-'),],
-            [sg.Slider(orientation='h', key='-SKIDER-')],
-            [sg.Button(image_data=sg.DEFAULT_BASE64_ICON, key='-LOGO-'), sg.Text('\tInputs')],
-            [sg.Input(key='-nome-'), sg.Text('Nome do Contato')],
-            [sg.Input(key='-email-'), sg.Text('Endereço')],
-            [sg.Input(key='-telefone-'), sg.Text('Telefone')],
+            [sg.Button(image_data=sg.DEFAULT_BASE64_ICON, key='-LOGO-'), sg.Text('\tContato')],
+            [sg.Text('Nome\t'), sg.Input(key='-nome-')],
+            [sg.Text('Endereço\t'), sg.Input(key='-email-')],
+            [sg.Text('Telefone\t'), sg.Input(key='-telefone-')],
             [sg.Checkbox('Cadastro', default=True, k='-CB-'),
                 sg.Radio('Masc', "RadioDemo", default=True, size=(10,1), k='-R1-'), sg.Radio('Fem', "RadioDemo", default=True, size=(10,1), k='-R2-'),
                 sg.Combo(values=('Lógica', 'crud', 'Web'), default_value='Módulo', readonly=True, k='-COMBO-')],
-            [sg.Button('Cadastro'), sg.Button('Exit')]           ]
+           [sg.Text('')],
+           [sg.Button('Cadastro'), sg.Button('Exit')],
+            ]
 # configuração do desenho do dashboard
 layout = [[sg.Column(top_banner, size=(960, 60), pad=(0,0), background_color=DARK_HEADER_COLOR)],
           [sg.Column(top, size=(920, 90), pad=BPAD_TOP)],
