@@ -17,7 +17,7 @@ def banco():
         conexao = mysql.connect(
             host="127.0.0.1", # ip do servidor
             user="root", # usuario
-            password="root", # senha do usuario
+            password="", # senha do usuario
             database="dbpython" # base de dados
         )
         # mensagem para verificação da conexão
